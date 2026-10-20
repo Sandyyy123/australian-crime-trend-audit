@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NSW Crime Trends Sample</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3a;--text:#e8e8f0;--muted:#9a9ab0;--accent:#6c5ce7;--accent2:#a29bfe;--green:#00b894;--orange:#e17055;--teal:#00cec9;--red:#ff7675;--yellow:#fdcb6e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent2)}
+.strip{background:#e17055;color:#1a0f0a;text-align:center;font-weight:600;padding:8px 16px;font-size:13px}
+.hero{background:linear-gradient(135deg,#0f1b3d 0%,#1a1040 55%,#0a0a0f 100%);padding:48px 16px 36px;border-bottom:1px solid var(--border)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.hero h1{font-size:clamp(26px,4.4vw,42px);line-height:1.15;margin:0 0 12px}
+.hero h1 span{color:var(--accent2)}
+.hero p.lead{color:#c8c8dc;max-width:800px;margin:0 0 24px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:14px}
+.stat b{display:block;font-size:26px;color:var(--accent2)}
+.stat small{color:var(--muted)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+.meta div{background:var(--surface);padding:12px 16px;font-size:13px}
+.meta b{display:block;color:var(--muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+section{padding:36px 0;border-bottom:1px solid var(--border)}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.num{width:36px;height:36px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+h2{margin:0;font-size:22px}
+h4{margin:0 0 6px;font-size:15px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px}
+@media (max-width:520px){.charts{grid-template-columns:1fr}}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.node{flex:1 1 160px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px}
+.node .d{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.auto{background:var(--green)}.manual{background:var(--orange)}.out{background:var(--teal)}
+.legend{font-size:12px;color:var(--muted);margin-top:8px}
+.tbl{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:var(--surface2);color:var(--muted);font-weight:600;font-size:12px}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.ci{color:var(--muted);font-size:12px}
+.muted{color:var(--muted)}
+.k-up{color:var(--red)}.k-down{color:var(--teal)}.k-stable{color:var(--yellow)}
+.flag{display:inline-block;background:rgba(225,112,85,.15);color:#ffb39f;border:1px solid rgba(225,112,85,.4);border-radius:6px;padding:0 6px;margin:0 4px 4px 0;font-size:11px}
+.chart{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
+.chart svg{width:100%;height:auto;display:block}
+.chart .g{stroke:#2a2a3a}.chart .t{fill:#9a9ab0;font-size:13px}.chart .pan{fill:rgba(253,203,110,.16)}
+.cap{color:var(--muted);font-size:12px;margin:6px 0 0}
+.brow{display:grid;grid-template-columns:minmax(110px,1.3fr) 2fr minmax(110px,.9fr);gap:10px;align-items:center;margin:8px 0;font-size:13px}
+.btrack{position:relative;height:26px;background:var(--surface2);border-radius:6px}
+.zero{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#555}
+.bar{position:absolute;height:10px;border-radius:3px}
+.b60{top:3px;background:var(--orange)}.b10{top:14px;background:var(--accent2)}
+.c60{color:var(--orange)}.c10{color:var(--accent2)}
+.hm{display:grid;gap:2px;font-size:11px;overflow-x:auto}
+.hy{color:var(--muted);text-align:center}
+.hl{color:var(--text);padding-right:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hc{text-align:center;padding:5px 0;border-radius:3px;font-variant-numeric:tabular-nums}
+.rec{border-left:4px solid;border-radius:10px;background:var(--surface);padding:14px 16px}
+.rec.g{border-color:var(--green)}.rec.o{border-color:var(--orange)}.rec.r{border-color:var(--red)}
+.check li{list-style:none;margin:6px 0}
+.check li:before{content:"✔";color:var(--green);margin-right:8px}
+.check li.todo:before{content:"○";color:var(--yellow)}
+.badge{font-size:11px;background:rgba(108,92,231,.2);border:1px solid var(--accent);border-radius:6px;padding:0 6px;margin-left:6px;color:var(--accent2)}
+.caveat{background:rgba(253,203,110,.07);border:1px solid rgba(253,203,110,.45);border-radius:12px;padding:18px}
+.caveat h3{margin:0 0 8px;color:var(--yellow)}
+ul{padding-left:20px}
+code{background:var(--surface2);padding:1px 5px;border-radius:4px;font-size:12px}
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;overflow-x:auto;font-size:12px}
+footer{padding:28px 0 40px;color:var(--muted);font-size:13px}
+footer b{color:var(--text)}
+@media (max-width:600px){.brow{grid-template-columns:1fr}.hero{padding-top:32px}}
+</style>
+</head>
+<body>
+<div class="strip">Sample output: built on real public NSW data (BOCSAR + ABS), retrieved $retrieved. Your datasets and questions would replace these.</div>
+
+<header class="hero"><div class="wrap">
+<h1>NSW recorded crime, $cov_first to $cov_last: <span>what the trends show, and what they cannot</span></h1>
+<p class="lead">A worked example of the report format: monthly police-recorded criminal incidents for all of New South Wales, converted to rates per 100,000 residents with ABS population estimates, tested for trend two ways, and screened for counting-rule and recording changes before any finding is written up.</p>
+<div class="stats">
+<div class="stat"><b>$n_series</b><small>offence series analysed</small></div>
+<div class="stat"><b>$n_months</b><small>months of data ($cov_first to $cov_last)</small></div>
+<div class="stat"><b>$n_up / $n_down / $n_stable</b><small>series up / down / stable over the last 60 months</small></div>
+<div class="stat"><b>$n_flagged</b><small>series carrying an interpretation flag</small></div>
+</div>
+</div></header>
+
+<div class="meta">
+<div><b>Tools</b>Python (pandas, statsmodels, scipy); SPSS-equivalent procedures listed in section 9</div>
+<div><b>Data in</b>BOCSAR monthly incidents by offence; ABS quarterly ERP (NSW, persons)</div>
+<div><b>Deliverable</b>Structured report + tables (CSV/Excel) + reproducible scripts</div>
+<div><b>Analyst</b>Sandeep Grover, PhD; biostatistician</div>
+</div>
+
+<main class="wrap">
+
+<section><div class="sh"><div class="num">1</div><h2>Analysis pipeline</h2></div>
+<div class="flow">
+<div class="node"><span class="d auto"></span><b>Ingest</b><br>BOCSAR workbook ($n_series offences x monthly columns), ABS ERP via the ABS Data API. Files hashed on arrival.</div>
+<div class="node"><span class="d auto"></span><b>Units</b><br>Tag each series with its counting unit (incidents, or victims for murder and manslaughter).</div>
+<div class="node"><span class="d auto"></span><b>Rates</b><br>Calendar-year totals divided by June ERP of the same year, x 100,000.</div>
+<div class="node"><span class="d auto"></span><b>Trends</b><br>60-month Kendall test (BOCSAR convention) + 10-year rate model with 95% CI.</div>
+<div class="node"><span class="d manual"></span><b>Review</b><br>Flags for new offences, level shifts, policing-sensitive categories; analyst checks each against source notes.</div>
+<div class="node"><span class="d out"></span><b>Report</b><br>Plain-language findings, tables, charts and a caveats register.</div>
+</div>
+<p class="legend"><span class="d auto" style="display:inline-block;width:9px;height:9px;border-radius:50%"></span> automated &nbsp; <span class="d manual" style="display:inline-block;width:9px;height:9px;border-radius:50%"></span> analyst judgement &nbsp; <span class="d out" style="display:inline-block;width:9px;height:9px;border-radius:50%"></span> output</p>
+</section>
+
+<section><div class="sh"><div class="num">2</div><h2>What is being counted</h2></div>
+<div class="grid3">
+<div class="card"><h4>Incidents (default)</h4>BOCSAR's default unit is the criminal incident: activity involving the same offender(s) and victim(s), at one location, in one uninterrupted period, in one offence category. One police event can hold several incidents.</div>
+<div class="card"><h4>Victims</h4>For murder and manslaughter BOCSAR counts victims, not incidents (marked with an asterisk in the source file). In this data: $m_n murder victims in $ty1. Victim counts exist only for crimes against the person.</div>
+<div class="card"><h4>Alleged offenders</h4>Persons of interest proceeded against by police are a separate unit, held in a different BOCSAR dataset. Mixing offender counts with incident counts in one chart would mislead.</div>
+</div>
+<p class="cap">Source: BOCSAR, <a href="$src_bocsar_using">Using crime statistics</a> (page last updated 5 Feb 2025; read $retrieved).</p>
+</section>
+
+<section><div class="sh"><div class="num">3</div><h2>Counts versus population-adjusted rates</h2></div>
+<div class="grid2">
+<div class="card"><h4>Why the denominator matters</h4>NSW grew from $dn_a95 residents (June $fy0) to $dn_a25 (June $ty1), ABS ERP. For the single incident series <b>$dn_offence</b>, $dn_cnt incidents were recorded in $fy0: <b>$dn_r95 per 100,000</b> with the $fy0 population, but only <b>$dn_rfix</b> if the single population printed in the BOCSAR file is used for every year. A fixed denominator understates this $fy0 rate by $under_s% and makes long-run declines look smaller than they are. This illustration keeps incident counts separate from victim-counted offences.</div>
+<div class="card"><h4>Vintages differ too</h4>The BOCSAR file's "2025 population" column ($dn_b) is $gap_s lower than the ABS June $ty1 ERP ($dn_a25) used here. Rates are only comparable when every year uses the same population series, stated in the methods. Small areas and high-visitor areas (for example the Sydney LGA) need extra care because residents are not the population at risk.</div>
+</div>
+</section>
+
+<section><div class="sh"><div class="num">4</div><h2>Headline table ($n_selected selected offences)</h2></div>
+<div class="tbl"><table>
+<thead><tr><th>Offence</th><th>Unit</th><th>Count $ty1</th><th>Rate per 100,000, $ty1</th><th>Rate trend $ty0-$ty1, % per year (95% CI)</th><th>60-month test ($kw0 to $kw1)</th><th>Flags</th></tr></thead>
+<tbody>$trs</tbody></table></div>
+<p class="cap">Rate trend: quasi-Poisson regression of annual counts with log(ERP) offset; the Pearson scale widens the CI for over-dispersion. 60-month test: Kendall's tau-b on monthly counts, p&lt;0.05, not run when any 12-month total is under 20; annual change from first and last 12-month totals (our reimplementation of the BOCSAR convention). Full results for all $n_series offences are in the CSV output.</p>
+</section>
+
+<section><div class="sh"><div class="num">5</div><h2>Long-run rates, $fy0 to $ty1</h2></div>
+<div class="charts">$charts</div>
+</section>
+
+<section><div class="sh"><div class="num">6</div><h2>The window you choose changes the story</h2></div>
+<p>The two trend measures disagree for $n_dis offences. The 60-month window begins in $kw0, inside the shaded $pan0-$pan1 years when several series dipped (see the retail theft chart), so a return towards earlier levels can register as a rise. Retail theft: <b>$r_k per year</b> on the 60-month test, but <b>$r_q per year</b> ($r_lo to $r_hi) for the $ty0-$ty1 rate. Both are correct for their window; the report states which question each answers.</p>
+<div class="card">
+$bars
+<p class="legend"><span class="c60">■</span> 60-month average annual change (counts) &nbsp; <span class="c10">■</span> $ty0-$ty1 rate change per year</p>
+</div>
+</section>
+
+<section><div class="sh"><div class="num">7</div><h2>Recording and definition breaks flagged</h2></div>
+<div class="grid2">
+<div class="card"><h4>Automatically detected</h4><ul style="max-height:440px;overflow:auto">$flag_items</ul></div>
+<div class="card"><h4>How the flags are used</h4>
+<ul><li><b>NEW_SERIES</b>: Coercive control ($cc_flag; $cc_n incidents in $ty1). A new offence has no meaningful long-run trend yet.</li>
+<li><b>LEVEL_SHIFT</b>: a year-on-year jump far outside the series' own variability (robust z of at least 3.5 and at least 50%). Each is checked against BOCSAR and ANZSOC notes before any trend is reported across it.</li>
+<li><b>POLICING_SENSITIVE</b> ($n_pol series): BOCSAR notes that drug offences, offensive behaviour and receiving stolen goods are mostly detected by police, so they track enforcement effort.</li>
+<li>BOCSAR offence categories are built from NSW Police incident categories. National comparisons need <a href="$src_abs_rc">ABS Recorded Crime - Victims</a>, which codes offences to <a href="$src_anzsoc">ANZSOC</a> and counts victims (a person, premises, organisation or vehicle), so its figures are not interchangeable with BOCSAR incidents.</li></ul></div>
+</div>
+</section>
+
+<section><div class="sh"><div class="num">8</div><h2>Rate index heatmap ($ty0 = 100)</h2></div>
+<div class="card">$hm
+<p class="legend">Red: rate above its $ty0 level; teal: below. Intensity saturates at +/-50.</p></div>
+</section>
+
+<section><div class="sh"><div class="num">9</div><h2>Reading the results</h2></div>
+<div class="grid3">
+<div class="rec g"><h4>Safe to state</h4>Direction and size of change in recorded rates, with confidence intervals, for a stated window and population series.</div>
+<div class="rec o"><h4>State with caveats</h4>Offences affected by reporting willingness (sexual and domestic violence), policing activity (drugs, offensive conduct) or a flagged break.</div>
+<div class="rec r"><h4>Not supported</h4>Claims about why a trend moved (a policy, an event) or about true offending levels. Trend analysis of recorded crime is descriptive, not causal.</div>
+</div>
+<div class="card" style="margin-top:14px"><h4>SPSS equivalents (if you prefer SPSS output)</h4>
+<pre>* Rate trend with population offset, over-dispersion via Pearson scale.
+COMPUTE log_erp = LN(erp).
+GENLIN count WITH year_c
+  /MODEL year_c DISTRIBUTION=POISSON LINK=LOG OFFSET=log_erp
+  /CRITERIA SCALE=PEARSON
+  /PRINT FIT SOLUTION (EXPONENTIATED).
+* 60-month monotonic trend test.
+NONPAR CORR /VARIABLES=month_index count /PRINT=KENDALL TWOTAIL.</pre>
+<p class="cap">Shown as the matching SPSS procedures; the figures on this page were produced in Python.</p></div>
+</section>
+
+<section><div class="sh"><div class="num">10</div><h2>What the full report contains</h2></div>
+<ul class="check">
+<li>Data inventory: source, unit, geography, period, release date and file hash for each dataset<span class="badge">done here</span></li>
+<li>Counts and rates per 100,000 by offence and year, with the population series named<span class="badge">done here</span></li>
+<li>Trend tests with 95% intervals, two windows, pandemic-years sensitivity<span class="badge">done here</span></li>
+<li>Caveats register: counting units, new offences, level shifts, policing-sensitive series<span class="badge">done here</span></li>
+<li class="todo">Your questions: offence types, regions (LGA, state), periods and comparisons you need</li>
+<li class="todo">Written findings in plain language, with tables in Excel and charts ready for slides</li>
+</ul>
+</section>
+
+<section>
+<div class="caveat"><h3>Caveats</h3>
+<ul>
+<li>Recorded crime counts what is reported to or detected by police and entered on COPS. Unreported crime is missing, and BOCSAR warns that for some offences recorded levels do not reflect actual crime.</li>
+<li>Changes in willingness to report, policing priorities and recording practice can move the numbers without any change in offending.</li>
+<li>Counting units differ (incidents, victims, alleged offenders); figures in different units are never added or compared directly.</li>
+<li>Rates use June ERP for NSW residents; areas with large visitor populations or populations under 3,000 give unstable rates.</li>
+<li>$ty1 is the last complete year; data run to $cov_last and the most recent months may be revised in later releases.</li>
+<li>Trend estimates describe recorded data over the stated window. They do not show cause and effect.</li>
+</ul></div>
+</section>
+
+<section><div class="sh"><div class="num">11</div><h2>Sources</h2></div>
+<ul>
+<li>NSW Bureau of Crime Statistics and Research (BOCSAR), <a href="$src_bocsar_data">Criminal incident data</a>: <a href="$src_bocsar_file">Recorded Criminal Incidents by month, All of NSW (XLSX)</a>, release 16 Sep 2026, data to $cov_last. Retrieved $retrieved. SHA-256 $bocsar_sha...</li>
+<li>Australian Bureau of Statistics, <a href="$src_abs_erp">National, state and territory population</a>, Quarterly ERP via the <a href="$src_abs_api">ABS Data API (ERP_Q, NSW, persons)</a>. Retrieved $retrieved. SHA-256 $erp_sha...</li>
+<li>BOCSAR, <a href="$src_bocsar_using">Using crime statistics</a> (counting units, trend-test convention, cautions).</li>
+<li>ABS, <a href="$src_anzsoc">ANZSOC offence classification</a>; <a href="$src_abs_rc">Recorded Crime - Victims</a>.</li>
+</ul>
+</section>
+</main>
+
+<footer><div class="wrap">
+<b>Sandeep Grover, PhD</b> - epidemiologist and biostatistician; PhD in epidemiology (2014), then 12 years of research statistics at Charité Berlin and the Universities of Lübeck, Tübingen and Marburg.<br>
+Feel free to share with your team.
+</div></footer>
+</body>
+</html>

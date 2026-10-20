@@ -1,0 +1,36 @@
+This repository and its contents are proprietary and licensed to Sandeep Grover.
+All rights reserved. No reuse, copying, modification, or distribution without prior
+written permission. See LICENSE.
+
+Third-party data (NOT covered by the proprietary LICENSE above)
+----------------------------------------------------------------
+The files in data_raw/ are redistributed verbatim, unmodified, under their
+publishers' licences. The proprietary licence applies only to the code and
+documentation written for this repository.
+
+1. data_raw/Incident_by_NSW.xlsx
+   Publisher: NSW Bureau of Crime Statistics and Research (BOCSAR), Department of
+   Communities and Justice, NSW Government.
+   Title: Recorded Criminal Incidents by month - All of NSW (release 16 Sep 2026, data to Jun 2026)
+   URL: https://bocsar.nsw.gov.au/content/dam/dcj/bocsar/documents/open-datasets/Incident_by_NSW.xlsx
+   Retrieved: 2026-10-20 (UTC). SHA-256: 78b0768a8352349b2890dc68ddae85541dd4168971ae3c260478d638a1099eca
+   Licence: Creative Commons Attribution 4.0 (CC BY 4.0), per the DCJ copyright statement
+   https://dcj.nsw.gov.au/statements/copyright-and-disclaimer.html ("Unless otherwise stated, material on
+   this website is licensed under ... CC BY 4.0"). Note: the older data.gov.au catalogue entry for the NSW
+   trends file lists CC BY 3.0 Australia; both permit redistribution with attribution.
+   Attribution: Source: NSW Bureau of Crime Statistics and Research, Recorded Criminal Incidents by month
+   (All of NSW), licensed under CC BY 4.0. No endorsement by BOCSAR or the State of NSW is implied.
+
+2. data_raw/ABS_ERP_Q_NSW_persons.csv
+   Publisher: Australian Bureau of Statistics (ABS).
+   Title: Quarterly Population Estimates (ERP), by State/Territory, Sex and Age (dataflow ERP_Q 1.0.0),
+   NSW, persons, all ages, 1994-Q1 onward.
+   URL: https://data.api.abs.gov.au/rest/data/ABS,ERP_Q,1.0.0/1.3.TOT.1.Q?startPeriod=1994-Q1
+   Retrieved: 2026-10-20 (UTC). SHA-256: ef00767517ff8fd3a81056271edf8d422f49454feccfca495186d7b8f4a9419a
+   Licence: Creative Commons Attribution 4.0 International (CC BY 4.0), per
+   https://www.abs.gov.au/website-privacy-copyright-and-disclaimer
+   Attribution: Source: Australian Bureau of Statistics, Quarterly Population Estimates (ERP), licensed
+   under CC BY 4.0.
+
+Dataset attribution: © State of New South Wales (Department of Communities and Justice). BOCSAR workbook redistributed unmodified; derived rates, figures and analyses are our calculations. Copyright notice: https://dcj.nsw.gov.au/statements/copyright-and-disclaimer.html
+Licence text: https://creativecommons.org/licenses/by/4.0/
